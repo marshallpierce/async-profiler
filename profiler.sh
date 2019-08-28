@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 usage() {
     echo "Usage: $0 [action] [options] <pid>"
@@ -77,7 +77,7 @@ jattach() {
     mirror_output
 }
 
-function abspath() {
+abspath() {
     if [ "$UNAME_S" == "Darwin" ]; then
         perl -MCwd -e 'print Cwd::abs_path shift' "$1"
     else
@@ -234,7 +234,8 @@ case $ACTION in
         ;;
     collect)
         jattach "start,event=$EVENT,file=$FILE$INTERVAL$JSTACKDEPTH$FRAMEBUF$THREADS$RING,$OUTPUT$FORMAT"
-        while (( DURATION-- > 0 )); do
+        while [[ $((DURATION - 1)) -gt 0 ]]; do
+            DURATION=$((DURATION - 1))
             check_if_terminated
             sleep 1
         done
